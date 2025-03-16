@@ -1,0 +1,247 @@
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 70%;
+    background-color: #f3f4f6;
+}
+
+.home-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    gap: 20px;
+}
+
+.big-box {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-button.active {
+    border-bottom: 2px solid #1b68db;
+    color: #3d86e6;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-grow: 1;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 4vh; /* Фиксированная ширина */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding-right: 10px;
+    border-right: 2px solid #e5e7eb;
+}
+
+.sidebar-icon {
+    font-size: 24px;
+    color: gray;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.sidebar-icon.active {
+    color: #3b82f6;
+}
+
+.content-area {
+    flex: 1; /* Контент теперь занимает все доступное пространство */
+    padding: 10px;
+    overflow: hidden;
+    min-width: 25ch;
+    max-width: 25ch;
+}
+
+.text-content {
+    font-size: 16px;
+    color: #4b5563;
+}
+
+.input-field {
+    width: 100%;
+    height: 90%;
+    border: 2px solid #e5e7eb9d;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.small-box {
+    width: 15ch;
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 1ch;
+    display: block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.ai-indicator-wrapper {
+    height: auto;
+    margin-top: 4ch;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.ai-indicator {
+    height: auto;
+    transform: rotate(0deg);
+}
+
+.check-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.check-button:hover {
+    background-color: #1e40af;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 1vh 2vh;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+}
+
+.nav-links {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #1b68db;
+}
+
+.nav-icons {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    margin-right: 3%;
+}
+/* Добавляем стили для темной темы */
+.home-container.dark {
+    background-color: #333; /* Серый фон */
+    color: #fff; /* Белый текст */
+}
+
+.home-container.dark .big-box,
+.home-container.dark .small-box {
+    background-color: #444; /* Темно-серый фон для коробок */
+    color: #fff; /* Белый текст */
+}
+
+.home-container.dark .tab-button.active {
+    border-bottom-color: #ffa500; /* Оранжевый цвет для активной вкладки */
+    color: #ffa500; /* Оранжевый текст */
+}
+
+.home-container.dark .sidebar-icon.active {
+    color: #ffa500; /* Оранжевый цвет для активной иконки */
+}
+
+.home-container.dark .input-field {
+    background-color: #555; /* Темный фон для текстового поля */
+    color: #fff; /* Белый текст */
+    border-color: #666; /* Темная граница */
+}
+
+.home-container.dark .text-content {
+    color: #fff; /* Белый текст */
+}
+
+.home-container.dark .check-button {
+    background-color: #ffa500; /* Оранжевый цвет для кнопки */
+    color: #fff; /* Белый текст */
+}
+
+
+.home-container.dark .check-button:hover {
+    background-color: #cc8400; /* Темно-оранжевый при наведении */
+}
+
+.home-container.dark .navbar {
+    background-color: #444; /* Темно-серый фон для навбара */
+    color: #fff; /* Белый текст */
+}
+
+.home-container.dark .nav-links a {
+    color: #fff; /* Белый текст для ссылок */
+}
+
+.home-container.dark .nav-links a:hover {
+    color: #ffa500; /* Оранжевый при наведении */
+}
+
+.home-container.dark .ai-indicator text {
+    fill: #fff; /* Белый текст для индикатора */
+}
+body.dark-mode {
+    background-color: #121212; /* Темный фон для всей страницы */
+    color: white; /* Белый текст для всей страницы */
+}
+
+/* Стили для кнопки переключения темы */
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: inherit;
+}
