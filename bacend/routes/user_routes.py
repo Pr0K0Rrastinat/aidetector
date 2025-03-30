@@ -12,3 +12,4 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="User already exists")
     create_user(db=db, user=user)
     return {"message": "User created successfully"}
+    

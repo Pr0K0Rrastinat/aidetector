@@ -30,7 +30,7 @@ const Register = () => {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.detail || "Ошибка при регистрации");
+        throw new Error(data.detail || "Error");
       }
 
       setTimeout(() => navigate("/home"), 1000);

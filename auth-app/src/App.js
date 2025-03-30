@@ -4,6 +4,9 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import "./App.css"; // Подключаем стили
 import Home  from "./components/Home";
+import About from "./pages/About";
+import TrainModelpage from "./pages/trainmodelpage";
+import GuidePage from "./pages/guidepage";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -17,8 +20,12 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login setUser={setUser} />} />
             <Route path="/register" element={<Register />} />
-            <Route path="*" element={<Navigate to="/login" />} />
             <Route path="/home" element={<Home />} />
+            <Route path="*" element={<Navigate to="/home" />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/trainmodelpage" element={<TrainModelpage />} />
+            <Route path="/guidepage" element={<GuidePage />} />
+
           </Routes>
         )}
       </div>

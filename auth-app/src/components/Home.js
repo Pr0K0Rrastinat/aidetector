@@ -1,21 +1,153 @@
 import React, { useEffect, useState } from "react";
 import { FaPencilAlt, FaFile, FaFolder ,FaSun, FaMoon} from "react-icons/fa";
 import "./Home.css"; // Подключаем CSS
+import Navbar from "./Navbar";
 
 const Home = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isChecking, setIsChecking] = useState(false); 
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("text");
   const [inputMode, setInputMode] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [aiPercentage, setAiPercentage] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [message, setMessage] = useState("");
+  const link = "http://localhost:8000"
 
-  const checkForAI = () => {
-    const percentage = Math.floor(Math.random() * 101); // Генерация случайного процента
-    setAiPercentage(percentage);
+  const getResult = async (filename) =>{
+    try {
+      setIsChecking(true);
+      let retries = 10; // Количество попыток
+      let resultData = null;
+
+      while (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Ждём 3 секунды перед следующим запросом
+
+        const resultResponse = await fetch(`${link}/result/by-filename/${filename}`, {
+          method: "GET",
+        });
+
+        if (resultResponse.ok) {
+          resultData = await resultResponse.json();
+          break;
+        }
+
+        retries--;
+      }
+
+      if (resultData) {
+        setAiPercentage(resultData.result);
+        setMessage("Result received!");
+      } else {
+        setMessage("Result not found. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error processing file:", error);
+      setMessage("An error occurred. Please try again.");
+    }
+    finally {
+      setIsChecking(false);
+    }
+  }
+
+  const download_report = async () => {
+    if (!selectedFile && selectedFiles.length === 0) {
+      alert("Please select a file or folder first!");
+      return;
+    }
+    let filename = selectedFile.name
+    try {
+        const response = await fetch(`${link}/generate_pdf/${filename}`);
+        console.log(filename)
+        if (!response.ok) {
+            throw new Error("Failed to generate report");
+        }
+
+        // Получаем Blob (файл)
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        // Создаём скрытую ссылку и эмулируем скачивание файла
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${filename}_report.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error("Error downloading report:", error);
+    }
+};
+
+
+  const checkForAI = async () => {
+    if (!selectedFile && selectedFiles.length === 0) {
+      alert("Please select a file or folder first!");
+      return;
+    }
+  
+    const formData = new FormData();
+    let userEmail = "guest@guest.com"; 
+  
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const response = await fetch(link + "/users/me", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          userEmail = data.email;
+        } else {
+          console.warn("Failed to fetch user data, using guest email.");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error.message);
+      }
+    }
+  
+    formData.append("email", userEmail); 
+  
+    if (selectedFile) {
+      formData.append("files", selectedFile);
+    } else {
+      selectedFiles.forEach((file) => {
+        formData.append("files", file);
+      });
+    }
+  
+    try {
+      const response = await fetch("http://127.0.0.1:8000/upload/", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Upload failed:", errorData);
+      } else {
+        console.log("File uploaded successfully!");
+
+        const filename = selectedFile.name;
+        getResult(filename)
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
   };
+  
+
+
   const getStrokeColor = () => {
     if (aiPercentage < 30) return "#22c55e"; // Зеленый
     if (aiPercentage < 50) return "#f59e0b"; // Оранжевый
@@ -28,65 +160,18 @@ const Home = () => {
         document.body.classList.remove("dark-mode");
     }
 }, [darkMode]);
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No token found, please log in.");
-        }
+  
+const handleFileChange = (event) => {
+  setSelectedFile(event.target.files[0]);
+};
 
-        console.log("Fetching user data with token:", token);
-
-        const response = await fetch("http://localhost:8000/users/me", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || "Failed to fetch user data");
-        }
-
-        const data = await response.json();
-        console.log("User data received:", data);
-        setUser(data);
-      } catch (err) {
-        console.error("Error fetching user:", err.message);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
-  if (loading) return <h2>Loading...</h2>;
-  if (error) return <h2 style={{ color: "red" }}>Error: {error}</h2>;
+const handleFolderChange = (event) => {
+  setSelectedFiles(Array.from(event.target.files));
+};
 
   return (
     <div className={`home-container ${darkMode ? "dark" : ""}`}>
-      <nav className="navbar">
-        <div className="nav-links">
-          <a href="#">About</a>
-          <a href="#">Train Model</a>
-          <a href="#">Guide</a>
-          <a href="#">Profile</a>
-        </div>
-        <div className="nav-icons">
-          <button onClick={() => setDarkMode(!darkMode)}>
-            {darkMode ? <FaMoon /> : <FaSun />}
-          </button>
-          <select className="language-selector">
-            <option value="en">EN</option>
-            <option value="ru">RU</option>
-          </select>
-        </div>
-      </nav>
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
       
       <div className="home-wrapper">
         <div className="big-box">
@@ -98,21 +183,31 @@ const Home = () => {
               Code
             </button>
           </div>
-
           <div className="content">
             <div className="sidebar">
               <FaPencilAlt className={`sidebar-icon ${inputMode === "manual" ? "active" : ""}`} onClick={() => setInputMode("manual")} />
               <FaFile className={`sidebar-icon ${inputMode === "file" ? "active" : ""}`} onClick={() => setInputMode("file")} />
               <FaFolder className={`sidebar-icon ${inputMode === "folder" ? "active" : ""}`} onClick={() => setInputMode("folder")} />
             </div>
-
             <div className="content-area">
               {inputMode === "manual" ? (
                 <textarea className="input-field" placeholder="Enter text..." value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
               ) : inputMode === "file" ? (
-                <p className="text-content">File input selected</p>
+                <div>
+                  <input type="file" onChange={handleFileChange} />
+                  {selectedFile && <p>Selected File: {selectedFile.name}</p>}
+                </div>
               ) : inputMode === "folder" ? (
-                <p className="text-content">Folder input selected</p>
+                <div>
+                  <input type="file" webkitdirectory="" directory="" multiple onChange={handleFolderChange} />
+                  {selectedFiles.length > 0 && (
+                    <ul>
+                      {selectedFiles.map((file, index) => (
+                        <li key={index}>{file.name}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               ) : (
                 <p className="text-content">Select an input method...</p>
               )}
@@ -136,11 +231,16 @@ const Home = () => {
                 strokeWidth="10" 
                 strokeDasharray={`${(aiPercentage / 100) * 80}, 80`}
               />
-              <text x="60" y="35" fontSize="18" textAnchor="middle" fill="#333">{aiPercentage}%</text>
+              <text x="60" y="35" fontSize="18" textAnchor="middle" fill="#333">{aiPercentage}</text>
             </svg>
           </div>
-          <button className="check-button" onClick={checkForAI}>Check</button>
-        </div>
+          {isChecking ? (
+                <div className="loading-spinner"></div>
+              ) : (
+                <button className="check-button" onClick={checkForAI}>Check</button>
+              )}      {!isChecking && <button className="download-button" onClick={download_report}>report</button>}
+   </div>
+              
       </div>
     </div>
   );

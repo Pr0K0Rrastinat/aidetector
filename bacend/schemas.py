@@ -16,3 +16,13 @@ class UserResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+class FileResponse(BaseModel):
+    filename: str
+    filepath: str
+    result: str
+
+class ResultResponse(BaseModel):
+    filename: str
+    result: str
+    user_email:str
