@@ -78,8 +78,7 @@
     flex: 1; /* Контент теперь занимает все доступное пространство */
     padding: 10px;
     overflow: hidden;
-    min-width: 25ch;
-    max-width: 25ch;
+    
 }
 
 .text-content {
@@ -88,7 +87,7 @@
 }
 
 .input-field {
-    width: 100%;
+    width: 98%;
     height: 90%;
     border: 2px solid #e5e7eb9d;
     border-radius: 8px;
@@ -237,4 +236,76 @@ body.dark-mode {
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  /* ... (ваш существующий CSS) */
+
+.file-upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .file-icon-placeholder {
+    margin-bottom: 20px;
+    color: #9ca3af; /* Светло-серый цвет иконки */
+  }
+  
+  .file-drop-text {
+    margin-bottom: 20px;
+    color: #6b7280; /* Темно-серый текст */
+  }
+  
+  .select-file-button {
+    padding: 10px 20px;
+    background-color: #3b82f6; /* Синий фон кнопки */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .select-file-button:hover {
+    background-color: #1e40af;
+  }
+  
+  .selected-file-name {
+    color: #374151; /* Темно-серый текст для имени файла */
+  }
+
+  /* ... (ваш существующий CSS) */
+
+.folder-upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .folder-icon-placeholder {
+    margin-bottom: 20px;
+    color: #9ca3af; /* Светло-серый цвет иконки */
+  }
+  
+  .folder-drop-text {
+    margin-bottom: 20px;
+    color: #6b7280; /* Темно-серый текст */
+  }
+  
+  .select-folder-button {
+    padding: 10px 20px;
+    background-color: #3b82f6; /* Синий фон кнопки */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .select-folder-button:hover {
+    background-color: #1e40af;
   }

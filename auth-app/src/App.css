@@ -45,7 +45,7 @@
 .auth-form button:hover {
   background-color: #ffffff;
   color: #000000;
-  border: 1px solid #000000; /* Исправленный бордер */
+  border: 0.5px solid #000000; /* Исправленный бордер */
   border-radius: 10px; /* Скругление углов */
 }
 

@@ -1,0 +1,178 @@
+.user-profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.user-info-box {
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 10%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar {
+  width: 70px;
+  height: 70px;
+  background-color: #E2E2E2;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.user-email {
+  font-size: 16px;
+  color: #555;
+  margin-top: 5px;
+}
+
+.file-list-box {
+  width: 50vh;
+  height: 44vh;
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 90%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding-right: 30px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  color: #999;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  flex: 2;
+}
+
+.file-icon {
+  width: 40px;
+  height: 40px;
+  background: #E2E2E2;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.file-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.file-type {
+  font-size: 14px;
+  color: #888;
+}
+
+.progress-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 3vh;
+}
+
+.progress-bar {
+  flex: 1;
+  width: 8vh;
+  background: #eee;
+  border-radius: 4px;
+  margin: 0 20px;
+  overflow: hidden;
+}
+
+
+.progress {
+  height: 100%;
+  background-color: #4caf50;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.report-btn, .delete-btn {
+  background: #f5f5f5;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.report-btn:hover {
+  background: #4caf50;
+}
+
+.delete-btn:hover {
+  background: #e80707;
+}
+.dark-mode {
+  background-color: #282c34;
+  color: #ffffff;
+}
+
+.dark-mode .user-info-box,
+.dark-mode .file-list-box {
+  background-color: #36393f;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .file-item {
+  background-color: #424549;
+}

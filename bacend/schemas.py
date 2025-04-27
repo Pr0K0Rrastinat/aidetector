@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 class UserCreate(BaseModel):
     username: str
@@ -21,8 +22,15 @@ class FileResponse(BaseModel):
     filename: str
     filepath: str
     result: str
+    uploaded_at: datetime
+    user_email:str
+
 
 class ResultResponse(BaseModel):
     filename: str
     result: str
-    user_email:str
+    user_email: str
+    filetype: str
+
+    class Config:
+        orm_mode = True

@@ -20,11 +20,11 @@ const Home = () => {
   const getResult = async (filename) =>{
     try {
       setIsChecking(true);
-      let retries = 10; // Количество попыток
+      let retries = 10;
       let resultData = null;
 
       while (retries > 0) {
-        await new Promise(resolve => setTimeout(resolve, 3000)); // Ждём 3 секунды перед следующим запросом
+        await new Promise(resolve => setTimeout(resolve, 3000));
 
         const resultResponse = await fetch(`${link}/result/by-filename/${filename}`, {
           method: "GET",
@@ -66,11 +66,9 @@ const Home = () => {
             throw new Error("Failed to generate report");
         }
 
-        // Получаем Blob (файл)
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
 
-        // Создаём скрытую ссылку и эмулируем скачивание файла
         const a = document.createElement("a");
         a.href = url;
         a.download = `${filename}_report.pdf`;
@@ -86,6 +84,11 @@ const Home = () => {
 
 
   const checkForAI = async () => {
+    if(inputMode == "manual"){
+      const blob = new Blob([inputValue], { type: 'text/plain' });
+      const file = new File([blob], 'output.txt', { type: 'text/plain' });
+      setSelectedFile(file);
+    }
     if (!selectedFile && selectedFiles.length === 0) {
       alert("Please select a file or folder first!");
       return;
@@ -117,6 +120,7 @@ const Home = () => {
     }
   
     formData.append("email", userEmail); 
+    formData.append("filetype",activeTab);
   
     if (selectedFile) {
       formData.append("files", selectedFile);
@@ -193,13 +197,27 @@ const handleFolderChange = (event) => {
               {inputMode === "manual" ? (
                 <textarea className="input-field" placeholder="Enter text..." value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
               ) : inputMode === "file" ? (
-                <div>
-                  <input type="file" onChange={handleFileChange} />
-                  {selectedFile && <p>Selected File: {selectedFile.name}</p>}
+                <div className="file-upload-section">
+                  <div className="file-icon-placeholder">
+                    <FaFile size={60} />
+                  </div>
+                  <p className="file-drop-text">Drop file here or select file</p>
+                  <label htmlFor="file-input" className="select-file-button">
+                    Select an file
+                  </label>
+                  <input id="file-input" type="file" onChange={handleFileChange} style={{ display: "none" }} />
+                  {selectedFile && <p className="selected-file-name">Selected File: {selectedFile.name}</p>}
                 </div>
-              ) : inputMode === "folder" ? (
-                <div>
-                  <input type="file" webkitdirectory="" directory="" multiple onChange={handleFolderChange} />
+              ) :  inputMode === "folder" ? (
+                <div className="folder-upload-section">
+                  <div className="folder-icon-placeholder">
+                    <FaFolder size={60} />
+                  </div>
+                  <p className="folder-drop-text">Drop folder here or select folder</p>
+                  <label htmlFor="folder-input" className="select-folder-button">
+                    Select folder
+                  </label>
+                  <input id="folder-input" type="file" webkitdirectory="" directory="" multiple onChange={handleFolderChange} style={{ display: "none" }} />
                   {selectedFiles.length > 0 && (
                     <ul>
                       {selectedFiles.map((file, index) => (

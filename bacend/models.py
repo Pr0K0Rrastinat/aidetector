@@ -16,7 +16,8 @@ class Result(Base):
     filename = Column(String, index=True)
     result = Column(String, index=True)
     user_email = Column(String, nullable=False)
-
+    filetype = Column(String)  
+    
 class UploadedFile(Base):
     __tablename__ = "uploaded_files"
 
@@ -25,3 +26,5 @@ class UploadedFile(Base):
     filepath = Column(String)
     uploaded_at = Column(DateTime, default=func.now())
     user_email = Column(String, nullable=False)
+    filetype = Column(String)
+

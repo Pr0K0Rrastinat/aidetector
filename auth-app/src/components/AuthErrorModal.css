@@ -1,0 +1,68 @@
+/* AuthErrorModal.css */
+
+.auth-error-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    pointer-events: auto; /* Разрешаем взаимодействие с модальным окном */
+  }
+  
+  .auth-error-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+  }
+  
+  .auth-error-modal h2 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .auth-error-modal p {
+    margin-bottom: 20px;
+    color: #666;
+  }
+  
+  .auth-error-buttons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .auth-error-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 10px;
+    color: white;
+  }
+  
+  .auth-error-register {
+    background-color: #4CAF50;
+  }
+  
+  .auth-error-login {
+    background-color: #007bff;
+  }
+  
+  .auth-error-button:hover {
+    opacity: 0.8;
+  }
+  
+  body.auth-error-modal-open { /* Добавляем стиль для body */
+    overflow: hidden; /* Отключаем прокрутку */
+    pointer-events: none; /* Отключаем взаимодействие с элементами */
+  }
+  
+  body.auth-error-modal-open .auth-error-modal-overlay {
+    pointer-events: auto; /* Разрешаем взаимодействие с модальным окном */
+  }
