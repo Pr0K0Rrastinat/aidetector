@@ -10,6 +10,8 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const link = 'http://185.209.21.152:8000';
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,7 +22,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/register", {
+      const response = await fetch(`${link}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

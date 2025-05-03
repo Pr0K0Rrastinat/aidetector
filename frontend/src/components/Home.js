@@ -18,7 +18,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [message, setMessage] = useState("");
   const [accesDownload,setAccesDownload] = useState(false);
-  const link = "http://localhost:8000"
+  const link = 'http://185.209.21.152:8000';
 
   const getResult = async (filename) =>{
     try {

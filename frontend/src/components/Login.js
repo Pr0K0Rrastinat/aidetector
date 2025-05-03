@@ -6,7 +6,7 @@ function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-
+  const link = 'http://185.209.21.152:8000';
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -15,7 +15,7 @@ function Login({ setUser }) {
     formData.append("password", password);
 
     try {
-      const response = await fetch("http://localhost:8000/token", {
+      const response = await fetch(`${link}/token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

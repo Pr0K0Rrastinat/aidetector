@@ -12,7 +12,7 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
     const [showModal, setShowModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [userData, setUserData] = useState({ email: '', results: [] });
-    const link = "http://localhost:8000";
+    const link = 'http://185.209.21.152:8000';
     const [username,setUsername] = useState("")
     const [darkMode, setDarkMode] = useState(() => {
         return localStorage.getItem("darkMode") === "true" || false;

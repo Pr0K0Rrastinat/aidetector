@@ -10,7 +10,7 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const fileInputRef = useRef(null);
   const folderInputRef = useRef(null);
-  const link = "http://localhost:8000"
+  const link = 'http://185.209.21.152:8000';
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', isDarkMode);
