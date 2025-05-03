@@ -20,7 +20,7 @@ app.mount("/statics", StaticFiles(directory="frontend/build/static"), name="stat
 
 @app.get("/")
 def read_index():
-    return FileResponse("frontend/build/src/index.html")
+    return FileResponse("frontend/build/index.html")
 
 
 app.add_middleware(
