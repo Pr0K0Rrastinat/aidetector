@@ -36,9 +36,7 @@ def read_index():
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://185.209.21.152",
-        "http://185.209.21.152:8000",
+        "*",
     ], 
     allow_credentials=True,
     allow_methods=["*"],
