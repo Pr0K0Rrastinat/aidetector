@@ -1,0 +1,142 @@
+/* Trainmodelpage.css */
+
+:root {
+  --primary:#1e1e1e;
+  --text-light: #f0f0f0;
+  --background-light: #fff;
+  --background-dark: #333;
+  --text-dark: #333;
+  --text-dark-mode: #f0f0f0;
+  --button-bg-light: #4ea8f1;
+  --button-bg-dark: #1e1e1e;
+  --button-hover-light: #357ab7;
+  --button-hover-dark: #444;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+body.dark-mode {
+  background: #1e1e1e;
+  color: var(--text-dark-mode);
+}
+
+.train-model-container {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.white-box {
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 1.5rem;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* добавляем тень */
+  transition: background 0.3s, border 0.3s, box-shadow 0.3s; 
+}
+
+body.dark-mode .white-box {
+  background: #2a2a2a; 
+  border: 1px solid #444;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05); 
+}
+
+textarea {
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  background: transparent;
+  border: none;
+  outline: none;
+  min-height: 2rem;
+  max-height: 9rem;
+  overflow-y: auto;
+}
+
+body.dark-mode textarea{
+  color: #ccc;
+}
+
+.white-box .icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.icon-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.icon-btn.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.icon-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.upload-container {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-right: 0.5rem;
+}
+
+.upload-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background-color: rgb(2, 2, 2);
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  right: 50%;
+}
+
+.upload-btn:hover {
+  background-color: #333;
+}
+
+.upload-btn:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  margin-top: 40px;
+  padding: 0 1rem;
+}
+.clear-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  background-color: rgb(2, 2, 2);
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  right: 50%;
+}
