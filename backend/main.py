@@ -11,16 +11,26 @@ from routes.trainiig_routes import router as training_data_router
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-
+import os
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+import os
+from fastapi.staticfiles import StaticFiles
 
-app.mount("/statics", StaticFiles(directory="frontend/build/static"), name="statics")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, "../frontend/build/static")
+
+# Проверь, существует ли папка
+if not os.path.exists(STATIC_DIR):
+    print("⚠️ STATIC_DIR не найден:", STATIC_DIR)
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 @app.get("/")
 def read_index():
-    return FileResponse("frontend/build/index.html")
+    return FileResponse(os.path.join(BASE_DIR, "../frontend/build/index.html"))
+
 
 
 app.add_middleware(
