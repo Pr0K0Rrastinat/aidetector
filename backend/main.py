@@ -16,7 +16,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.mount("/statics", StaticFiles(directory="frontend/build/src/statics"), name="statics")
+app.mount("/statics", StaticFiles(directory="frontend/build/static"), name="statics")
 
 @app.get("/")
 def read_index():
