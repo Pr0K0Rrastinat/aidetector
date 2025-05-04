@@ -6,7 +6,7 @@ from models import UploadedFile, Result
 from datetime import datetime
 from schemas import FileResponse, ResultResponse
 from services.model_service import predict
-
+import uuid
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -23,7 +23,7 @@ async def upload_files(
     saved_results = []
     try:
         for file in files:
-            file_uuid_str = str(uuid.uuid4()) # Генерируем UUID
+            file_uuid_str = str(uuid.uuid4()) # # Генерируем UUID
             file_path = os.path.join(UPLOAD_FOLDER, file.filename)
             with open(file_path, "wb") as buffer:
                 buffer.write(await file.read())
