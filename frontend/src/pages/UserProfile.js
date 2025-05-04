@@ -104,7 +104,7 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
                     throw new Error('No access token found');
                 }
 
-                const userResponse = await fetch(link + "/users/me", {
+                const userResponse = await fetch(`${link}/users/me`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'accept': 'application/json'
