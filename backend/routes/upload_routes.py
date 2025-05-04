@@ -23,7 +23,7 @@ async def upload_files(
     saved_results = []
     try:
         for file in files:
-            file_uuid_str = str(uuid.uuid4()) # # Генерируем UUID
+            file_uuid_str = str(uuid.uuid4())  # Генерируем UUID
             file_path = os.path.join(UPLOAD_FOLDER, file.filename)
             with open(file_path, "wb") as buffer:
                 buffer.write(await file.read())
@@ -84,15 +84,3 @@ def get_uploaded_files(db: Session = Depends(get_db)):
     files = db.query(UploadedFile).all()
     return {"files": [{"filename": file.filename, "filepath": file.filepath, "uploaded_at": file.uploaded_at, "user_email": file.user_email, "filetype": file.filetype} for file in files]}
 
-@router.get("/result/by-uuid/{file_uuid}", response_model=ResultResponse)
-def get_result_by_uuid(file_uuid: str, db: Session = Depends(get_db)):
-    file_result = db.query(Result).filter(Result.file_uuid == file_uuid).first()
-    if not file_result:
-        raise HTTPException(status_code=404, detail="Result not found")
-    return {
-        "filename": file_result.filename,
-        "result": file_result.result,
-        "user_email": file_result.user_email,
-        "filetype": file_result.filetype,
-        "file_uuid": file_result.file_uuid
-    }

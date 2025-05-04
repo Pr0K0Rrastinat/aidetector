@@ -5,7 +5,7 @@ import httpx
 
 router = APIRouter()
 
-API_URL = "http://localhost:8000/resultby-uuid/"
+API_URL = "http://185.209.21.152:8000/result/by-uuid/"
 
 
 @router.get("/generate_pdf/{fileUuid}", response_class=FileResponse)

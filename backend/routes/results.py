@@ -24,6 +24,19 @@ def get_result_by_filename(filename: str, db: Session = Depends(get_db)):
         "filetype": file_result.filetype
     }
 
+@router.get("/result/by-uuid/{file_uuid}", response_model=ResultResponse)
+def get_result_by_uuid(file_uuid: str, db: Session = Depends(get_db)):
+    file_result = db.query(Result).filter(Result.file_uuid == file_uuid).first()
+    if not file_result:
+        raise HTTPException(status_code=404, detail="Result not found")
+    return {
+        "filename": file_result.filename,
+        "result": file_result.result,
+        "user_email": file_result.user_email,
+        "filetype": file_result.filetype,
+        "file_uuid": file_result.file_uuid
+    }
+
 @router.get("/result/by-email/{user_email}")
 async def get_results_by_email(user_email: str, db: Session = Depends(get_db)):
     results = db.query(Result).filter(Result.user_email == user_email).all()
