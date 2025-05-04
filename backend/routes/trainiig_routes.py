@@ -39,7 +39,7 @@ async def upload_training_data(
         saved_files.append({
             "filename": file.filename,
             "filepath": file_path,
-            "uploaded_at": training_data.uploaded_at,
+            "uploaded_at": training_data.uploaded_at.isoformat() if training_data.uploaded_at else None,
             "filetype": filetype
         })
 

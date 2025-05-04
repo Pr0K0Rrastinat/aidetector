@@ -20,21 +20,11 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "../frontend/build/static")
 INDEX_PATH = os.path.join(BASE_DIR, "../frontend/build/index.html")
 
+
 if not os.path.exists(STATIC_DIR):
     print("⚠️ STATIC_DIR не найден:", STATIC_DIR)
 if not os.path.exists(INDEX_PATH):
     print("⚠️ index.html не найден:", INDEX_PATH)
-
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
-
-@app.get("/")
-def read_index():
-    return FileResponse(INDEX_PATH)
-
-# fallback for React Router
-@app.get("/{full_path:path}")
-def serve_react_app(full_path: str):
-    return FileResponse(INDEX_PATH)
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,11 +34,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Подключаем все роутеры
+# Определите ВСЕ ваши API-маршруты ПЕРЕД маршрутом-ловушкой
 app.include_router(auth_router)
 app.include_router(user_router)
 app.include_router(users.router)
 app.include_router(upload_router)
-app.include_router(result_router) 
-app.include_router(generate_pdf_router) 
+app.include_router(result_router)
+app.include_router(generate_pdf_router)
 app.include_router(training_data_router)
+
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+@app.get("/")
+def read_index():
+    return FileResponse(INDEX_PATH)
+
+# Маршрут-ловушка для React Router - ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ
+@app.get("/{full_path:path}")
+def serve_react_app(full_path: str):
+    return FileResponse(INDEX_PATH)

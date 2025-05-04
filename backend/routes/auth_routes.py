@@ -24,12 +24,12 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 # Получение текущего пользователя по токену
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)): 
     credentials_exception = HTTPException(status_code=401, detail="Invalid or expired token")
-
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: Optional[str] = payload.get("sub")
+        print(f"username {username}")
         if username is None:
             raise credentials_exception
     except JWTError:
@@ -38,6 +38,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     user = db.query(User).filter(User.email == username).first()
     if user is None:
         raise credentials_exception
+    print(f"Тип current_user в get_current_user: {type(user)}")
     return user
 
 # Эндпоинт для получения информации о текущем пользователе

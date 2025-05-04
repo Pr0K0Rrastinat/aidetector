@@ -27,14 +27,20 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
       let resultData = null;
 
       while (retries > 0) {
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
 
         const resultResponse = await fetch(`${link}/result/by-filename/${filename}`, {
           method: "GET",
         });
 
         if (resultResponse.ok) {
-          resultData = await resultResponse.json();
+          try {
+            resultData = await resultResponse.json();
+          } catch (e) {
+            console.error("Error parsing JSON:", e);
+            setMessage("Error parsing server response.");
+            return;
+          }
           break;
         }
 
