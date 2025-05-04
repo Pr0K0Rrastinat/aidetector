@@ -20,7 +20,14 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [lastProcessedFileUuid, setLastProcessedFileUuid] = useState("");
   const [accesDownload,setAccesDownload] = useState(false);
   const link = 'http://185.209.21.152:8000';
+  const pathRef = useRef(null);
+  const [pathLength, setPathLength] = useState(0);
 
+  useEffect(() => {
+    if (pathRef.current) {
+      setPathLength(pathRef.current.getTotalLength());
+    }
+  }, []);
   const getResult = async (fileUuid) => { // Принимает fileUuid
     try {
         setIsChecking(true);
@@ -173,8 +180,9 @@ try {
 
 const getStrokeColor = () => {
   const percentage = Number(aiPercentage);
-  if (percentage < 30) return "#22c55e";
-  if (percentage < 50) return "#f59e0b";
+  console.log(aiPercentage)
+  if (aiPercentage < 30) return "#22c55e";
+  if (aiPercentage < 50) return "#f59e0b";
   return "#ef4444";
 };
   useEffect(() => {
@@ -201,6 +209,12 @@ const getStrokeColor = () => {
 
   const handleFileClick = () => {
     fileInputRef.current.click();
+  };
+
+  const getStrokeDasharray = () => {
+    const percentage = Number(aiPercentage);
+    const dashLength = (aiPercentage / 100) * pathLength;
+    return `${dashLength}, ${pathLength}`;
   };
 
   const handleFolderClick = () => {
@@ -293,18 +307,19 @@ const getStrokeColor = () => {
         <div className="small-box">
               <div className="ai-indicator-wrapper">
                 <svg className="ai-indicator" width="150" height="100" viewBox="4 5 120 15">
-                  <path 
-                    d="M10,40 A40,40 0 0,1 110,40" 
-                    fill="none" 
-                    stroke="#e5e7eb" 
+                  <path
+                    ref={pathRef} // Добавляем ref к path
+                    d="M10,40 A40,40 0 0,1 110,40"
+                    fill="none"
+                    stroke="#e5e7eb"
                     strokeWidth="10"
                   />
-                  <path 
-                    d="M10,40 A40,40 0 0,1 110,40" 
-                    fill="none" 
-                    stroke={getStrokeColor()} 
-                    strokeWidth="10" 
-                    strokeDasharray={`${(aiPercentage / 100) * 80}, 80`}
+                  <path
+                    d="M10,40 A40,40 0 0,1 110,40"
+                    fill="none"
+                    stroke={getStrokeColor()}
+                    strokeWidth="10"
+                    strokeDasharray={getStrokeDasharray()} // Используем вычисляемое значение
                   />
                   <text x="60" y="35" fontSize="18" textAnchor="middle" fill="#333">{aiPercentage}</text>
                 </svg>

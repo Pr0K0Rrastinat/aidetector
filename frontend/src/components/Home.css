@@ -190,6 +190,16 @@ body.dark-mode .small-box{
     animation: spin 1s linear infinite;
     margin: 20px auto;
   }
+
+  .body.dark-mode .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: rgb(226, 223, 223);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+  }
   
   @keyframes spin {
     0% { transform: rotate(0deg); }
