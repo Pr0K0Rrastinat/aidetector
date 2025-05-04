@@ -12,7 +12,6 @@ const Register = () => {
   const navigate = useNavigate();
   const link = 'http://185.209.21.152:8000';
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -35,6 +34,9 @@ const Register = () => {
         throw new Error(data.detail || "Error");
       }
 
+      // Сохраняем полученный токен
+      localStorage.setItem('token', data.access_token);
+      console.log()
       setTimeout(() => navigate("/home"), 1000);
     } catch (error) {
       setMessage(error.message);
@@ -76,10 +78,9 @@ const Register = () => {
         </button>
       </form>
       {message && <p className="message">{message}</p>}
-          <p>
-      Already have an account? <Link to="/login">Sign in</Link>
-    </p>
-
+      <p>
+        Already have an account? <Link to="/login">Sign in</Link>
+      </p>
     </div>
   );
 };

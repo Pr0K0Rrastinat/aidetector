@@ -25,15 +25,15 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
         file.filename.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const download_report = async (filename) => {
-        if (!filename || filename.length === 0) {
+    const download_report = async (file_uuid,filename) => {
+        if (!filename || filename=== 0) {
             alert("Пожалуйста, сначала выберите файл!");
             return;
         }
     
         try {
-            const response = await fetch(`${link}/generate_pdf/${filename}`);
-            console.log(filename);
+            const response = await fetch(`${link}/generate_pdf/${file_uuid}`);
+            console.log(file_uuid);
             if (!response.ok) {
                 throw new Error("Не удалось сгенерировать отчет");
             }
@@ -43,7 +43,7 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
     
             const a = document.createElement("a");
             a.href = url;
-            a.download = `${filename}_report.pdf`;
+            a.download = `${filename}_report${file_uuid}.pdf`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -54,17 +54,18 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
         }
     };
 
-    const delete_report = async (filename) => {
+    const delete_report = async (filename,file_uuid) => {
       if (!filename || filename.length === 0) {
           alert("Please select a file or folder first!");
           return;
       }
 
       try {
-          const response = await fetch(`${link}/result/delete/${userData.email}/${filename}`, {
+          const response = await fetch(`${link}/result/delete/${userData.email}/${file_uuid}`, {
               method: 'POST',
           });
           console.log(filename);
+          console.log(file_uuid);
           console.log(userData.email);
           if (!response.ok) {
               throw new Error("Failed to delete report");
@@ -196,10 +197,10 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
                                     </div>
                                 </div>
                                 <div className="actions">
-                                <button className="report-btn" onClick={() => download_report(file.filename)}>
+                                <button className="report-btn" onClick={() => download_report(file.file_uuid,file.filename)}>
                                     <IoMdDownload />
                                 </button>
-                                <button className="delete-btn" onClick={() => delete_report(file.filename)}>
+                                <button className="delete-btn" onClick={() => delete_report(file.filename,file.file_uuid)}>
                                     <MdDeleteForever />
                                 </button>
                                 </div>
