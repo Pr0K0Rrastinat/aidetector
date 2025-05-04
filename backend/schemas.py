@@ -21,9 +21,10 @@ class UserResponse(BaseModel):
 class FileResponse(BaseModel):
     filename: str
     filepath: str
-    result: str
     uploaded_at: datetime
-    user_email:str
+    user_email: str
+    filetype: str
+    file_uuid: str
 
 
 class ResultResponse(BaseModel):
@@ -31,6 +32,7 @@ class ResultResponse(BaseModel):
     result: str
     user_email: str
     filetype: str
+    file_uuid: str
 
     class Config:
         orm_mode = True

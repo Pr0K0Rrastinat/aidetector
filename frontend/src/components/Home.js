@@ -17,79 +17,80 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [message, setMessage] = useState("");
+  const [lastProcessedFileUuid, setLastProcessedFileUuid] = useState("");
   const [accesDownload,setAccesDownload] = useState(false);
   const link = 'http://185.209.21.152:8000';
 
-  const getResult = async (filename) =>{
+  const getResult = async (fileUuid) => { // Принимает fileUuid
     try {
-      setIsChecking(true);
-      let retries = 10;
-      let resultData = null;
+        setIsChecking(true);
+        let retries = 10;
+        let resultData = null;
 
-      while (retries > 0) {
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        while (retries > 0) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
-        const resultResponse = await fetch(`${link}/result/by-filename/${filename}`, {
-          method: "GET",
-        });
+            const resultResponse = await fetch(`${link}/result/by-uuid/${fileUuid}`, { // Используем fileUuid
+                method: "GET",
+            });
 
-        if (resultResponse.ok) {
-          try {
-            resultData = await resultResponse.json();
-          } catch (e) {
-            console.error("Error parsing JSON:", e);
-            setMessage("Error parsing server response.");
-            return;
-          }
-          break;
+            if (resultResponse.ok) {
+                try {
+                    resultData = await resultResponse.json();
+                } catch (e) {
+                    console.error("Error parsing JSON:", e);
+                    setMessage("Error parsing server response.");
+                    return;
+                }
+                break;
+            }
+
+            retries--;
         }
 
-        retries--;
-      }
-
-      if (resultData) {
-        setAiPercentage(resultData.result);
-        setMessage("Result received!");
-      } else {
-        setMessage("Result not found. Please try again later.");
-      }
+        if (resultData) {
+            setAiPercentage(resultData.result);
+            setMessage("Result received!");
+        } else {
+            setMessage("Result not found. Please try again later.");
+        }
     } catch (error) {
-      console.error("Error processing file:", error);
-      setMessage("An error occurred. Please try again.");
+        console.error("Error processing file:", error);
+        setMessage("An error occurred. Please try again.");
+    } finally {
+        setAccesDownload(true)
+        setIsChecking(false);
     }
-    finally {
-      setAccesDownload(true)
-      setIsChecking(false);
-    }
+}
+const download_report = async (fileUuid) => {
+  if (!fileUuid) {
+    alert("Идентификатор файла недоступен для скачивания.");
+    return;
   }
 
-  const download_report = async () => {
-    if (!selectedFile && selectedFiles.length === 0) {
-      alert("Please select a file or folder first!");
+  let filename = selectedFile ? selectedFile.name : (selectedFiles.length > 0 ? selectedFiles[0].name : "");
+  if (!filename) {
+      alert("Filename not available for download.");
       return;
-    }
-    let filename = selectedFile.name
-    try {
-        const response = await fetch(`${link}/generate_pdf/${filename}`);
-        console.log(filename)
-        if (!response.ok) {
-            throw new Error("Failed to generate report");
-        }
-
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${filename}_report.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-
-    } catch (error) {
-        console.error("Error downloading report:", error);
-    }
+  }
+  try {
+      const response = await fetch(`${link}/generate_pdf/${fileUuid}`);
+      console.log(filename)
+      if (!response.ok) {
+          throw new Error("Failed to generate report");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${filename}_report${fileUuid}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+  } catch (error) {
+      console.error("Error downloading report:", error);
+  }
 };
 
 
@@ -97,22 +98,20 @@ const checkForAI = async () => {
   let fileToUpload = selectedFile;
 
   if (textareaValue.trim()) {
-    console.log("Generating file from textarea...");
-
-    const blob = new Blob([textareaValue], { type: 'text/plain' });
-    fileToUpload = new File([blob], 'output.txt', { type: 'text/plain' });
-    setSelectedFile(fileToUpload)
+      console.log("Generating file from textarea...");
+      const blob = new Blob([textareaValue], { type: 'text/plain' });
+      fileToUpload = new File([blob], 'output.txt', { type: 'text/plain' });
+      setSelectedFile(fileToUpload)
   }
 
   if (!fileToUpload && selectedFolderFiles.length === 0) {
-    alert("Please select a file, folder, or enter text!");
-    return;
+      alert("Please select a file, folder, or enter text!");
+      return;
   }
-  
+
   setTextareaValue("")
   const formData = new FormData();
   let userEmail = "guest@guest.com";
-
   const token = localStorage.getItem("token");
   if (token) {
     try {
@@ -140,31 +139,36 @@ const checkForAI = async () => {
 
   if (fileToUpload) {
     formData.append("files", fileToUpload);
-  } else {
+} else {
     selectedFolderFiles.forEach((file) => {
-      formData.append("files", file);
+        formData.append("files", file);
     });
-  }
-  
+}
 
-  try {
+try {
     const response = await fetch(`${link}/upload/`, {
-      method: "POST",
-      body: formData,
+        method: "POST",
+        body: formData,
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Upload failed:", errorData);
+        const errorData = await response.json();
+        console.error("Upload failed:", errorData);
     } else {
-      console.log("File uploaded successfully!");
+        const responseData = await response.json(); // Получаем ответ с сервера
+        console.log("File uploaded successfully!", responseData);
 
-      const filename = fileToUpload ? fileToUpload.name : selectedFiles[0].name;
-      getResult(filename);
+        if (responseData.results && responseData.results.length > 0) {
+            const fileUuid = responseData.results[0].file_uuid; // Получаем UUID
+            setLastProcessedFileUuid(fileUuid);
+            getResult(fileUuid); // Передаем UUID в getResult
+        } else {
+            setMessage("Error: Could not retrieve file information.");
+        }
     }
-  } catch (error) {
+} catch (error) {
     console.error("Error uploading file:", error);
-  }
+}
 };
 
 const getStrokeColor = () => {
@@ -306,10 +310,10 @@ const getStrokeColor = () => {
                 </svg>
               </div>
               {accesDownload ? (
-                    <button className="download-button" onClick={download_report}>download</button>
-                  ) : (
-                    <div> </div>
-                  )}
+                    <button className="download-button" onClick={() => download_report(lastProcessedFileUuid)}>download</button>
+                  ) : (
+                    <div> </div>
+                  )}
         </div>
       </div>
     </main>

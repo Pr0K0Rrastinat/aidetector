@@ -26,33 +26,33 @@ const UserProfile = ({isDarkMode,toggleDarkMode}) => {
     );
 
     const download_report = async (filename) => {
-      if (!filename && filename.length === 0) {
-        alert("Please select a file or folder first!");
-        return;
-      }
-      
-      try {
-          const response = await fetch(`${link}/generate_pdf/${filename}`);
-          console.log(filename)
-          if (!response.ok) {
-              throw new Error("Failed to generate report");
-          }
-  
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-  
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = `${filename}_report.pdf`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-  
-      } catch (error) {
-          console.error("Error downloading report:", error);
-      }
-  };
+        if (!filename || filename.length === 0) {
+            alert("Пожалуйста, сначала выберите файл!");
+            return;
+        }
+    
+        try {
+            const response = await fetch(`${link}/generate_pdf/${filename}`);
+            console.log(filename);
+            if (!response.ok) {
+                throw new Error("Не удалось сгенерировать отчет");
+            }
+    
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+    
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${filename}_report.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+    
+        } catch (error) {
+            console.error("Ошибка при скачивании отчета:", error);
+        }
+    };
 
     const delete_report = async (filename) => {
       if (!filename || filename.length === 0) {

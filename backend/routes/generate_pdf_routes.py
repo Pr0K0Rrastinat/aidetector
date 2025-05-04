@@ -5,13 +5,13 @@ import httpx
 
 router = APIRouter()
 
-API_URL = "http://localhost:8000/result/by-filename/"
+API_URL = "http://localhost:8000/resultby-uuid/"
 
 
-@router.get("/generate_pdf/{filename}", response_class=FileResponse)
-async def get_pdf(filename: str):
+@router.get("/generate_pdf/{fileUuid}", response_class=FileResponse)
+async def get_pdf(fileUuid: str):
     try:
-        url = f"{API_URL}{filename}"
+        url = f"{API_URL}{fileUuid}"
         print(f"📡 Отправляем асинхронный запрос: {url}")
 
         async with httpx.AsyncClient() as client:
@@ -24,6 +24,7 @@ async def get_pdf(filename: str):
 
         data = response.json()
         ai_percentage = data.get("result", "0%")
+        filename=data.get("filename")
         print(f"📊 AI Probability: {ai_percentage}")
 
         pdf_path = generate_pdf(filename, ai_percentage)
