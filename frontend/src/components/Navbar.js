@@ -55,7 +55,7 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
           </span>
 
           {/* Выбор языка */}
-          <div style={{ position: 'relative', display: 'inline-block', marginRight: '15px' }}>
+          {/*<div style={{ position: 'relative', display: 'inline-block', marginRight: '15px' }}>
             <span onClick={toggleLanguageMenu} style={{ cursor: 'pointer' }}>
               🌐 {language}
             </span>
@@ -66,7 +66,7 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
                 <div onClick={() => selectLanguage('KZ')}>Қазақша</div>
               </div>
             )}
-          </div>
+          </div>*/}
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <span onClick={toggleProfileMenu} style={{ cursor: 'pointer' }}>
               👤
