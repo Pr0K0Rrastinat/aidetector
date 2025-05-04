@@ -142,7 +142,7 @@ const checkForAI = async () => {
   
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/upload/", {
+    const response = await fetch(`${link}/upload/`, {
       method: "POST",
       body: formData,
     });
@@ -160,8 +160,6 @@ const checkForAI = async () => {
     console.error("Error uploading file:", error);
   }
 };
-
-
 
 const getStrokeColor = () => {
   const percentage = Number(aiPercentage);
