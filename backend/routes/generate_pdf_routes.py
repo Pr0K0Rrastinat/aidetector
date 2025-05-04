@@ -11,7 +11,7 @@ API_URL = "http://185.209.21.152:8000/result/by-uuid"
 @router.get("/generate_pdf/{fileUuid}", response_class=FileResponse)
 async def get_pdf(fileUuid: str):
     try:
-        url = f"{API_URL}{fileUuid}"
+        url = f"{API_URL}/{fileUuid}"
         print(f"📡 Отправляем асинхронный запрос: {url}")
 
         async with httpx.AsyncClient() as client:
