@@ -51,13 +51,12 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
                 }
                 break;
             }
-
             retries--;
         }
 
         if (resultData) {
             setAiPercentage(resultData.result);
-            setMessage("Result received!");
+            setMessage("Result received!"); 
         } else {
             setMessage("Result not found. Please try again later.");
         }

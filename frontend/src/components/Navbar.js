@@ -64,7 +64,7 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
                 <div onClick={() => selectLanguage('EN')}>English</div>
                 <div onClick={() => selectLanguage('RU')}>Русский</div>
                 <div onClick={() => selectLanguage('KZ')}>Қазақша</div>
-              </div>
+              </div>cd
             )}
           </div>*/}
           <div style={{ position: 'relative', display: 'inline-block' }}>

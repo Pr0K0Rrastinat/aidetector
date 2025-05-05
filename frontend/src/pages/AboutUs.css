@@ -212,78 +212,84 @@ footer {
 
 body.dark-mode footer {
     background: #333;
-    color: #f0f0f0;
+    color: #f0f0f0; 
 }
 
 /* Медиа-запросы для адаптивности */
-@media (max-width: 768px) {
-    .nav-links {
-        gap: 1rem;
-    }
-    .nav-links a {
-        font-size: 0.9rem;
-    }
-    .main-container {
-        padding: 2rem 3%;
-        flex-direction: column; /* Переводим элементы в колонку на маленьких экранах */
-        align-items: stretch; /* Растягиваем элементы по ширине */
-    }
-    .main-text {
-        flex: 0 0 auto; /* Не даем базовую ширину, занимаем всю доступную */
-        margin-bottom: 1.5rem;
-    }
-    .team-visual {
-        flex: 0 0 auto;
-        width: 100%; /* Занимаем всю ширину */
-    }
-    .diamond-grid {
-        gap: 1rem;
-    }
-    .diamond {
-        width: 80px;
-        height: 80px;
-        margin-bottom: 0.8rem;
-    }
-    .caption-grid {
-        gap: 1rem;
-        margin-top: 0.8rem;
-    }
-    .caption {
-        max-width: 80px;
-    }
-    .section-boxes {
-        padding: 1.5rem 3%;
-        flex-direction: column; /* Переводим секции в колонку */
-    }
-    .section-box {
-        flex: 0 0 auto;
-        width: 100%; /* Занимаем всю ширину */
-        margin: 1rem 0;
-    }
+@media (max-width: 900px) {
+  .main-container {
+      flex-direction: column;
+      align-items: stretch;
+  }
+  .main-text {
+      margin-bottom: 1.5rem;
+  }
+  .team-visual {
+      width: 100%;
+  }
 }
-
-@media (max-width: 480px) {
-    .nav-links {
-        gap: 0.8rem;
-    }
-    .nav-links a {
-        font-size: 0.8rem;
-    }
-    .main-text h1 {
-        font-size: 2rem;
-    }
-    .diamond {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 0.6rem;
-    }
-    .caption {
-        max-width: 60px;
-    }
-    .caption h3 {
-        font-size: 0.8rem;
-    }
-    .caption p {
-        font-size: 0.7rem;
-    }
+@media (max-height: 480px) {
+  .nav-links {
+      gap: 0.5rem; /* Еще уменьшим gap */
+  }
+  .nav-links a {
+      font-size: 0.7rem; /* Еще уменьшим шрифт */
+  }
+  .main-container {
+      padding-top: 0.5rem; /* Еще уменьшим padding */
+      padding-bottom: 0.5rem; /* Еще уменьшим padding */
+  }
+  .main-text {
+      margin-top: 0.5rem; /* Еще уменьшим margin */
+      margin-bottom: 0.5rem; /* Еще уменьшим margin */
+  }
+  .main-text h1 {
+      font-size: 1.8rem; /* Еще немного уменьшим */
+      margin-bottom: 0.2rem;
+  }
+  .main-text p {
+      font-size: 0.8rem; /* Можно оставить или еще немного уменьшить */
+      margin-bottom: 0.3rem;
+  }
+  .team-visual {
+      margin-top: 0.5rem; /* Еще уменьшим margin */
+      margin-bottom: 0.5rem; /* Еще уменьшим margin */
+  }
+  .diamond-grid {
+      gap: 0.5rem; /* Еще уменьшим gap */
+  }
+  .diamond {
+      width: 50px; /* Еще уменьшим */
+      height: 50px; /* Еще уменьшим */
+      margin-bottom: 0.4rem;
+  }
+  .caption {
+      max-width: 50px; /* Еще уменьшим */
+  }
+  .caption h3 {
+      font-size: 0.7rem; /* Еще уменьшим */
+      margin: 0.1rem 0 0;
+  }
+  .caption p {
+      font-size: 0.6rem; /* Еще уменьшим */
+  }
+  .section-boxes {
+      padding: 1rem 3%;
+  }
+  .section-box {
+      margin: 0.5rem 0; /* Еще уменьшим margin */
+      padding: 1rem;
+  }
+  .section-box h4 {
+      font-size: 0.9rem; /* Еще уменьшим */
+      margin-bottom: 0.2rem;
+  }
+  .section-box p {
+      font-size: 0.8rem; /* Еще уменьшим */
+  }
+  footer {
+      padding-top: 1rem; /* Уменьшим padding */
+      padding-bottom: 1rem; /* Уменьшим padding */
+      font-size: 0.8rem; /* Еще уменьшим шрифт */
+  }
 }
