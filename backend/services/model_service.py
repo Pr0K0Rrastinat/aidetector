@@ -20,7 +20,6 @@ def predict(text: str):
     probs = float(torch.nn.functional.softmax(output.logits, dim=1)[0, 1])
     return probs * 100
 
-св 
 def train_model_from_db(db: Session):
     entries = db.query(TrainingData).all()
     train_data = []
