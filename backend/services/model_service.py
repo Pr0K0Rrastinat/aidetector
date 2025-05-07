@@ -18,7 +18,7 @@ def predict(text: str):
     inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
     output = model(**inputs)
     probs = torch.nn.functional.softmax(output.logits, dim=1)
-    ai_prob = float(probs[0, 1])  # porb Ai
+    ai_prob = probs[0, 1].item()
     return ai_prob * 100
 
 def train_model_from_db(db: Session):
