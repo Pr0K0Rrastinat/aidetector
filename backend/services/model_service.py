@@ -17,11 +17,10 @@ model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
 def predict(text: str):
     inputs = tokenizer(text, return_tensors='pt', truncation=True, padding=True)
     output = model(**inputs)
-    logits = output.logits
-    probs = torch.nn.functional.softmax(logits, dim=1)
+    probs = float(torch.nn.functional.softmax(output.logits, dim=1)[0, 1])
     return probs * 100
 
-
+св 
 def train_model_from_db(db: Session):
     entries = db.query(TrainingData).all()
     train_data = []

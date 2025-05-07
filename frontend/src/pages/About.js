@@ -5,7 +5,7 @@ import Navbar from "../components/Navbar";
 import aldiyarImg from '../statics/jasik.jpg';
 import dilnazImg from '../statics/d.jpg';
 import arnurImg from '../statics/asyq.jpg';
-
+import { useTranslation } from 'react-i18next';
 
 const About = ({ isDarkMode, toggleDarkMode }) => {
   const [showLanguagePopup, setShowLanguagePopup] = useState(false);
@@ -20,6 +20,7 @@ const About = ({ isDarkMode, toggleDarkMode }) => {
     setShowLanguagePopup(false);
     setShowProfilePopup(false);
   };
+
 
   return (
     <div

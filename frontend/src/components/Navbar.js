@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import './Navbar.css';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 const Navbar = ({ toggleDarkMode, isDarkMode }) => {
@@ -9,10 +10,12 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const navigate = useNavigate(); // Для навигации
+  const { t, i18n } = useTranslation();
 
   const handleDarkModeClick = () => {
     toggleDarkMode();
   };
+
 
   const toggleLanguageMenu = () => {
     setShowLanguageMenu(prev => !prev);
@@ -26,8 +29,10 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
 
   const selectLanguage = (lang) => {
     setLanguage(lang);
+    i18n.changeLanguage(lang);
     setShowLanguageMenu(false);
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem('token'); 
@@ -41,9 +46,9 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
       </NavLink>
 
       <div className="nav-links">
-        <NavLink to="/home" activeClassName="active">Home</NavLink>
-        <NavLink to="/trainmodelpage" activeClassName="active">Train model</NavLink>
-        <NavLink to="/about" activeClassName="active">About us</NavLink>
+        <NavLink to="/home">{t('home')}</NavLink>
+        <NavLink to="/trainmodelpage">{t('trainModel')}</NavLink>
+        <NavLink to="/about">{t('aboutUs')}</NavLink>
       </div>
 
       <div className="nav-icons-wrapper">
@@ -55,7 +60,7 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
           </span>
 
           {/* Выбор языка */}
-          {/*<div style={{ position: 'relative', display: 'inline-block', marginRight: '15px' }}>
+          <div style={{ position: 'relative', display: 'inline-block', marginRight: '15px' }}>
             <span onClick={toggleLanguageMenu} style={{ cursor: 'pointer' }}>
               🌐 {language}
             </span>
@@ -64,9 +69,9 @@ const Navbar = ({ toggleDarkMode, isDarkMode }) => {
                 <div onClick={() => selectLanguage('EN')}>English</div>
                 <div onClick={() => selectLanguage('RU')}>Русский</div>
                 <div onClick={() => selectLanguage('KZ')}>Қазақша</div>
-              </div>cd
+              </div>
             )}
-          </div>*/}
+          </div>
           <div style={{ position: 'relative', display: 'inline-block' }}>
             <span onClick={toggleProfileMenu} style={{ cursor: 'pointer' }}>
               👤

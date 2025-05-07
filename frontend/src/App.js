@@ -1,3 +1,4 @@
+import './i18n';
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login.js";
@@ -10,6 +11,7 @@ import GuidePage from "./pages/guidepage.js";
 import UserProfile from "./pages/UserProfile.js";
 import Navbar from "./components/Navbar.js"; 
 console.log("Navbar component in App:", Navbar);
+
 
 function App() {
   const [user, setUser] = useState(null);
