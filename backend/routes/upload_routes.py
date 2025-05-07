@@ -35,7 +35,7 @@ async def upload_files(
 
             try:
                 prediction = predict(file_content_str)
-                model_result = round(prediction[0][0].item(), 2)
+                model_result = round(prediction, 2)
                 print(f"Prediction: {model_result}%")
             except Exception as e:
                 print(f"Error during prediction: {e}")
