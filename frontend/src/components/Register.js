@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate ,Link} from "react-router-dom";
-
+import { useNavigate, Link } from "react-router-dom";
+import Notification from "./Notification"; // Import the Notification component
+import "./Register.css"
 const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -8,17 +9,34 @@ const Register = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [notification, setNotification] = useState(null); // State for notifications
   const navigate = useNavigate();
   const link = 'http://185.209.21.152:8000';
+  const [secondPassword, setSecondPassword] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleConfirmPassword = (e) => {
+    setSecondPassword(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+    if (formData.password.length < 6) {
+      setNotification({ message: "Password is too weak. Minimum 6 characters required.", type: 'warning' });
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password !== secondPassword) {
+      setNotification({ message: "Passwords do not match.", type: 'warning' });
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch(`${link}/register`, {
@@ -31,15 +49,15 @@ const Register = () => {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.detail || "Error");
+        throw new Error(data.detail || "Registration error");
       }
 
-      // Сохраняем полученный токен
+      // Save the received token
       localStorage.setItem('token', data.access_token);
-      console.log()
+      setNotification({ message: "Registration successful!", type: 'success' });
       setTimeout(() => navigate("/home"), 1000);
     } catch (error) {
-      setMessage(error.message);
+      setNotification({ message: error.message, type: 'error' });
     } finally {
       setLoading(false);
     }
@@ -60,7 +78,7 @@ const Register = () => {
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="user@example.com"
           value={formData.email}
           onChange={handleChange}
           required
@@ -73,11 +91,26 @@ const Register = () => {
           onChange={handleChange}
           required
         />
-        <button type="submit" disabled={loading}>
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={secondPassword}
+          onChange={handleConfirmPassword}
+          required
+        />
+        
+      </form>
+      <button type="submit" disabled={loading}>
           {loading ? "Registration..." : "Sign Up"}
         </button>
-      </form>
-      {message && <p className="message">{message}</p>}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onDismiss={() => setNotification(null)}
+        />
+      )}
+
       <p>
         Already have an account? <Link to="/login">Sign in</Link>
       </p>

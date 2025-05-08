@@ -46,13 +46,11 @@
     color: white;
   }
   
-  .auth-error-register {
-    background-color: #4CAF50;
+  .auth-error-register,.auth-error-login {
+    background-color: #000000;
+    border:1px solid #000000;
   }
-  
-  .auth-error-login {
-    background-color: #007bff;
-  }
+
   
   .auth-error-button:hover {
     opacity: 0.8;

@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-
+import Notification from "./Notification"; // Import the Notification component
+import './Register.css'
 function Login({ setUser }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [notification, setNotification] = useState(null); // State for notifications
   const navigate = useNavigate();
   const link = 'http://185.209.21.152:8000';
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
@@ -24,15 +26,16 @@ function Login({ setUser }) {
       });
 
       if (!response.ok) {
-        throw new Error("Login failed");
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Login failed");
       }
 
       const data = await response.json();
       localStorage.setItem("token", data.access_token);
-      setMessage("Login successful!");
+      setNotification({ message: "Login successful!", type: 'success' });
       navigate("/home");
     } catch (error) {
-      setMessage(error.message || "Login failed");
+      setNotification({ message: error.message || "Login failed", type: 'error' });
     }
   };
 
@@ -52,8 +55,15 @@ function Login({ setUser }) {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Sign in</button>
-      {message && <p className="error-message">{message}</p>}
-      
+
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onDismiss={() => setNotification(null)}
+        />
+      )}
+
       <p>
         Don't have an account? <Link to="/register">Create one</Link>
       </p>

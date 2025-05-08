@@ -1,0 +1,44 @@
+/* Notification.css */
+.notification-container {
+    position: fixed;
+    bottom: 30px; /* Увеличим отступ снизу */
+    right: 30px; /* Увеличим отступ справа */
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 20px; /* Увеличим внутренний отступ */
+    border-radius: 8px; /* Сделаем углы чуть более скругленными */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Увеличим тень */
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(30px); /* Увеличим начальное смещение */
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    z-index: 9999; /* Чтобы быть поверх всего */
+    font-size: 1rem; /* Немного увеличим размер шрифта */
+  }
+  
+  .notification-container.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .notification-message {
+    margin: 0;
+    flex-grow: 1;
+    font-size: 1.1rem; /* Еще немного увеличим размер шрифта сообщения */
+  }
+  
+  .notification-dismiss-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5em; /* Увеличим размер кнопки закрытия */
+    cursor: pointer;
+    margin-left: 15px; /* Увеличим отступ слева */
+    padding: 0;
+    line-height: 1;
+  }
+  
+  .notification-dismiss-button:hover {
+    opacity: 0.7;
+  }

@@ -75,26 +75,6 @@ body.dark-mode textarea{
   gap: 0.5rem; /* Добавим небольшой отступ между иконками */
 }
 
-.icon-btn {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  border: 1px solid #d1d5db;
-  background: white;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.icon-btn.active {
-  background-color: var(--primary);
-  color: white;
-  border-color: var(--primary);
-}
-
-.icon-btn:hover {
-  background-color: #f3f4f6;
-}
 
 .upload-container {
   width: 100%;
@@ -112,11 +92,11 @@ body.dark-mode textarea{
   color: white;
   font-size: 0.875rem;
   cursor: pointer;
+  margin-top: 1rem; /* Добавим отступ сверху, если кнопки переносятся */
+
 }
 
-.upload-btn:hover {
-  background-color: #333;
-}
+
 
 .upload-btn:disabled {
   background-color: #ccc;
@@ -143,6 +123,28 @@ main {
   cursor: pointer;
   margin-top: 1rem; /* Добавим отступ сверху, если кнопки переносятся */
 }
+.icon-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid #d1d5db;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.4s ease, color 0.4s ease; 
+}
+
+.icon-btn.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.icon-btn:hover {
+  background-color: #b5b6b7;
+}
+
 
 /* Медиа-запросы для адаптивности */
 @media (max-width: 768px) {
@@ -180,4 +182,39 @@ main {
       width: 100%; /* Кнопка clear на всю ширину */
       margin-top: 0.5rem;
   }
+}
+
+.loading-overlay {
+  position: fixed; /* Фиксированное позиционирование относительно viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7); /* Полупрозрачный белый фон */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Убедитесь, что он поверх всего */
+}
+
+.dark-mode .loading-overlay {
+  background: rgba(0, 0, 0, 0.7); /* Полупрозрачный черный фон в темном режиме */
+}
+
+.loading-spinner {
+  width: 40px; /* Увеличим размер спиннера */
+  height: 40px;
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-left-color: rgb(2, 2, 2);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.dark-mode .loading-spinner {
+  border-left-color: rgb(226, 223, 223);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

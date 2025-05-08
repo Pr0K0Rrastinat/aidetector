@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Home.css';
 import Navbar from './Navbar';
+import Notification from './Notification';
 
 const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [uploadDisabled, setUploadDisabled] = useState(true);
@@ -8,12 +9,9 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [selectedFolderFiles, setSelectedFolderFiles] = useState([]);
   const fileInputRef = useRef(null);
   const folderInputRef = useRef(null);
-  const [user, setUser] = useState(null);
   const [isChecking, setIsChecking] = useState(false); 
-  const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("text");
   const [aiPercentage, setAiPercentage] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [message, setMessage] = useState("");
@@ -22,6 +20,8 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const link = 'http://185.209.21.152:8000';
   const pathRef = useRef(null);
   const [pathLength, setPathLength] = useState(0);
+  const [textAreaDisabled,setTextAreaDiasbled] = useState(false)
+  const [notification, setNotification] = useState(null); // State for notifications
 
   useEffect(() => {
     if (pathRef.current) {
@@ -30,7 +30,6 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   }, []);
   const getResult = async (fileUuid) => { // Принимает fileUuid
     try {
-        setIsChecking(true);
         let retries = 10;
         let resultData = null;
 
@@ -70,38 +69,42 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
 }
 const download_report = async (fileUuid) => {
   if (!fileUuid) {
-    alert("Идентификатор файла недоступен для скачивания.");
+    setNotification({ message: "File identifier is not available for download.", type: 'warning' });
     return;
   }
 
   let filename = selectedFile ? selectedFile.name : (selectedFiles.length > 0 ? selectedFiles[0].name : "");
   if (!filename) {
-      alert("Filename not available for download.");
-      return;
+    setNotification({ message: "Filename not available for download.", type: 'warning' });
+    return;
   }
   try {
-      const response = await fetch(`${link}/generate_pdf/${fileUuid}`);
-      console.log(filename)
-      if (!response.ok) {
-          throw new Error("Failed to generate report");
-      }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `${filename}_report${fileUuid}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+    const response = await fetch(`${link}/generate_pdf/${fileUuid}`);
+    console.log(filename);
+    if (!response.ok) {
+      throw new Error("Failed to generate report");
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${filename}_report${fileUuid}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   } catch (error) {
-      console.error("Error downloading report:", error);
+    console.error("Error downloading report:", error);
+    setNotification({ message: "Error downloading report.", type: 'error' });
   }
 };
 
 
 const checkForAI = async () => {
+  setIsChecking(true);
   let fileToUpload = selectedFile;
+  
+  
 
   if (textareaValue.trim()) {
       console.log("Generating file from textarea...");
@@ -111,11 +114,10 @@ const checkForAI = async () => {
   }
 
   if (!fileToUpload && selectedFolderFiles.length === 0) {
-      alert("Please select a file, folder, or enter text!");
-      return;
+    setNotification({ message: "Please select a file, folder, or enter text!", type: 'warning' });
+    return;
   }
 
-  setTextareaValue("")
   const formData = new FormData();
   let userEmail = "guest@guest.com";
   const token = localStorage.getItem("token");
@@ -159,7 +161,8 @@ try {
 
     if (!response.ok) {
         const errorData = await response.json();
-        console.error("Upload failed:", errorData);
+        console.error("Upload failed:", errorData)
+        setNotification({ message: `Upload failed: ${errorData.detail || 'Unknown error'}`, type: 'error' });
     } else {
         const responseData = await response.json(); // Получаем ответ с сервера
         console.log("File uploaded successfully!", responseData);
@@ -169,20 +172,22 @@ try {
             setLastProcessedFileUuid(fileUuid);
             getResult(fileUuid); // Передаем UUID в getResult
         } else {
-            setMessage("Error: Could not retrieve file information.");
+          setNotification({ message: "Error: Could not retrieve file information.", type: 'error' });
         }
     }
 } catch (error) {
     console.error("Error uploading file:", error);
+    setNotification({ message: "Error uploading file.", type: 'error' });
 }
 };
 
 const getStrokeColor = () => {
-  const percentage = Number(aiPercentage);
   console.log(aiPercentage)
+  if(aiPercentage<0.02) return "none";
   if (aiPercentage < 30) return "#22c55e";
   if (aiPercentage < 50) return "#f59e0b";
-  return "#ef4444";
+  if(aiPercentage >=50) return "#ef4444";
+  return "none";
 };
   useEffect(() => {
     document.body.classList.toggle('dark-mode', isDarkMode);
@@ -190,7 +195,7 @@ const getStrokeColor = () => {
 
   useEffect(() => {
     if (
-      (textareaValue.trim() && !selectedFile && selectedFolderFiles.length === 0) ||
+      (textareaValue.trim() && !textAreaDisabled && selectedFolderFiles.length === 0) ||
       (selectedFile && !textareaValue && selectedFolderFiles.length === 0) ||
       (selectedFolderFiles.length > 0 && !selectedFile && !textareaValue)
     ) {
@@ -199,19 +204,19 @@ const getStrokeColor = () => {
       setUploadDisabled(true);
     }
   }, [textareaValue, selectedFile, selectedFolderFiles]);
+
   
 
   const handleTextareaInput = (e) => {
     setTextareaValue(e.target.value);
   };
   
-
   const handleFileClick = () => {
     fileInputRef.current.click();
   };
 
   const getStrokeDasharray = () => {
-    const percentage = Number(aiPercentage);
+    console.log(aiPercentage)
     const dashLength = (aiPercentage / 100) * pathLength;
     return `${dashLength}, ${pathLength}`;
   };
@@ -223,16 +228,17 @@ const getStrokeColor = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTextareaValue("");
+      setTextAreaDiasbled(true)
+      setTextareaValue("")
       setSelectedFile(file);
       setUploadDisabled(false);
     }
   };
   
-  
   const handleFolderChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
+      setTextAreaDiasbled(true)
       setSelectedFolderFiles(files);
       setUploadDisabled(false);
     }
@@ -244,14 +250,14 @@ const getStrokeColor = () => {
       <Navbar toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
       <div className='main-sector'>
           <div className="white-box">
-            {!selectedFile && selectedFolderFiles.length === 0 && (
+            {!textAreaDisabled && selectedFolderFiles.length === 0 && (
               <textarea
                 placeholder="Enter"
                 value={textareaValue}
                 onChange={handleTextareaInput}
               />
             )}
-            {selectedFile && (
+            {selectedFile && textareaValue.length === 0 && textAreaDisabled &&(
               <p>Chosen file: <strong>{selectedFile.name}</strong></p>
             )}
             {selectedFolderFiles.length > 0 && (
@@ -287,8 +293,10 @@ const getStrokeColor = () => {
               <div className="right-icons">
               {(isChecking === false && (selectedFile || selectedFolderFiles.length > 0)) && (
                 <button className="clear-btn" onClick={() => {
+                  setTextareaValue("")
                   setSelectedFile(null);
                   setSelectedFolderFiles([]);
+                  setTextAreaDiasbled(false)
                 }}>
                   Clear Selection
                 </button>
@@ -324,12 +332,19 @@ const getStrokeColor = () => {
                 </svg>
               </div>
               {accesDownload ? (
-                    <button className="download-button" onClick={() => download_report(lastProcessedFileUuid)}>download</button>
-                  ) : (
-                    <div> </div>
-                  )}
+                <button className="download-button" onClick={() => download_report(lastProcessedFileUuid)}>download</button>
+                    ) : (
+                <div> </div>
+              )}
         </div>
       </div>
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onDismiss={() => setNotification(null)}
+        />
+      )}
     </main>
   );
 };

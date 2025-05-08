@@ -59,6 +59,9 @@ body.dark-mode .white-box,.small-box{
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
 }
 
+
+
+
 textarea {
   width: 100%;
   font-size: 1rem;
@@ -105,8 +108,21 @@ body.dark-mode textarea{
 
 
 .check-btn:hover {
-  background-color: #333;
+  background-color: #ffffff;
+  color: #1e1e1e;
+  animation-duration: 0.7ms;
 }
+
+button:hover{
+  background-color: #ffffff;
+  color: #1e1e1e;
+  animation-duration: 0.7ms;
+}
+
+button{
+  transition: background-color 0.4s ease, color 0.4s ease; 
+}
+
 
 .check-btn:disabled {
   background-color: #ccc;

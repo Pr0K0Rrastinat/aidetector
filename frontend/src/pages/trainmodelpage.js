@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Trainmodelpage.css';
 import Navbar from '../components/Navbar';
+import Notification from '../components/Notification';
 
 const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
   const [activeButton, setActiveButton] = useState('text');
@@ -9,8 +10,11 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const fileInputRef = useRef(null);
+  const [isChecking, setIsChecking] = useState(false); 
   const folderInputRef = useRef(null);
   const link = 'http://185.209.21.152:8000';
+  const [notification, setNotification] = useState(null); 
+
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', isDarkMode);
@@ -47,27 +51,28 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
   };
 
   const upload = async () => {
+    setIsChecking(true);
     let fileToUpload = selectedFile;
-
     if (textareaValue.trim()) {
       console.log("Generating file from textarea...");
-
       const blob = new Blob([textareaValue], { type: 'text/plain' });
       fileToUpload = new File([blob], 'output.txt', { type: 'text/plain' });
-      setSelectedFile(fileToUpload)
-      setTextareaValue("")
+      setSelectedFile(fileToUpload);
+      setTextareaValue("");
     }
-    if (!fileToUpload && selectedFiles.length === 0) {
-      alert("Please select a file, folder, or enter text!");
+    if (!fileToUpload && selectedFiles.length === 0 && !textareaValue.trim()) {
+      setNotification({ message: "Please select a file, folder, or enter text!", type: 'warning' });
+      setIsChecking(false);
       return;
     }
-    console.log(activeButton)
-
+    console.log(activeButton);
+  
     const filetype = activeButton;
-
-    console.log(filetype)
+  
+    console.log(filetype);
     if (!filetype) {
-      alert("Please select a mode (AI or H) before uploading.");
+      setNotification({ message: "Please select a mode (AI or H) before uploading.", type: 'warning' });
+      setIsChecking(false);
       return;
     }
   
@@ -95,20 +100,21 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
         throw new Error(result.detail || "Failed to upload files.");
       }
   
-      
       if (result.training_started) {
-        alert("🚀 Модель начала обучение!");
+        setNotification({ message: "File successfully uploaded!", type: 'success' });
       }
-      
+  
       setSelectedFile(null);
       setSelectedFiles([]);
-      handleModeSwitch("")
-
+      handleModeSwitch("");
+      setIsChecking(false);
+  
       console.log(result);
   
     } catch (error) {
       console.error("Error uploading files:", error);
-      alert("Ошибка загрузки файлов.");
+      setNotification({ message: "Error uploading files.", type: 'error' });
+      setIsChecking(false);
     }
   };
   
@@ -126,29 +132,29 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
       <Navbar toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
 
       <div className="white-box">
-      {!selectedFile && selectedFiles.length === 0 && (
-  <textarea
-    placeholder="Enter"
-    value={textareaValue}
-    onChange={handleTextareaInput}
-  />
-)}
+        {!selectedFile && selectedFiles.length === 0 && (
+          <textarea
+            placeholder="Enter"
+            value={textareaValue}
+            onChange={handleTextareaInput}
+          />
+        )}
 
-{selectedFile && (
-  <p>Chosen file: <strong>{selectedFile.name}</strong></p>
-)}
+        {selectedFile && (
+          <p>Chosen file: <strong>{selectedFile.name}</strong></p>
+        )}
 
-{/* Если выбрана папка */}
-{selectedFiles.length > 0 && (
-  <div>
-    <p>Chosen folder:</p>
-    <ul>
-      {selectedFiles.map((file, index) => (
-        <li key={index}>{file.webkitRelativePath}</li>
-      ))}
-    </ul>
-  </div>
-)}
+        {/* Если выбрана папка */}
+        {selectedFiles.length > 0 && (
+          <div>
+            <p>Chosen folder:</p>
+            <ul>
+              {selectedFiles.map((file, index) => (
+                <li key={index}>{file.webkitRelativePath}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="icons">
           <div className="left-icons">
             <button className="icon-btn" onClick={handleFileClick}>📄</button>
@@ -172,7 +178,7 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
             /> */}
           </div>
           <div className="right-icons">
-          
+
             <button
               className={`icon-btn ${activeButton === 'ai' ? 'active' : ''}`}
               onClick={() => handleModeSwitch('ai')}
@@ -188,21 +194,35 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
           </div>
         </div>
       </div>
-      
+
       <div className="upload-container">
-      {(selectedFile || selectedFiles.length > 0) && (
+        {(selectedFile || selectedFiles.length > 0 || textareaValue.trim()) && (
           <button className="clear-btn" onClick={() => {
             setSelectedFile(null);
             setSelectedFiles([]);
-            handleModeSwitch("")
+            setTextareaValue("");
+            handleModeSwitch("");
           }}>
             Clear Selection
           </button>
         )}
-        <button className="upload-btn" disabled={uploadDisabled} onClick={upload}>
+        <button className="upload-btn" onClick={upload}>
           Upload
         </button>
       </div>
+
+      {isChecking && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onDismiss={() => setNotification(null)}
+        />
+      )}
     </main>
   );
 };
