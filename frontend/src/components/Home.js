@@ -17,7 +17,7 @@ const Home = ({ isDarkMode, toggleDarkMode }) => {
   const [message, setMessage] = useState("");
   const [lastProcessedFileUuid, setLastProcessedFileUuid] = useState("");
   const [accesDownload,setAccesDownload] = useState(false);
-  const link = 'http://185.209.21.152:8000';
+  const link = 'http://193.169.105.43:8000';
   const pathRef = useRef(null);
   const [pathLength, setPathLength] = useState(0);
   const [textAreaDisabled,setTextAreaDiasbled] = useState(false)

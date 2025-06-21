@@ -12,7 +12,7 @@ const TrainModelPage = ({ isDarkMode, toggleDarkMode }) => {
   const fileInputRef = useRef(null);
   const [isChecking, setIsChecking] = useState(false); 
   const folderInputRef = useRef(null);
-  const link = 'http://185.209.21.152:8000';
+  const link = 'http://193.169.105.43:8000';
   const [notification, setNotification] = useState(null); 
 
 

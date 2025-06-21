@@ -7,7 +7,7 @@ function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null); // State for notifications
   const navigate = useNavigate();
-  const link = 'http://185.209.21.152:8000';
+  const link = 'http://193.169.105.43:8000';
 
   const handleLogin = async (e) => {
     e.preventDefault();
