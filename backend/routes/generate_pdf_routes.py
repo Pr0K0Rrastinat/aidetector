@@ -6,7 +6,7 @@ import json
 
 router = APIRouter()
 
-API_URL = "http://185.209.21.152:8000/result/by-uuid"
+API_URL = "http://193.169.105.43:8000/result/by-uuid"
 
 
 @router.get("/generate_pdf/{fileUuid}", response_class=FileResponse)

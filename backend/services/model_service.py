@@ -20,8 +20,12 @@ def predict(text: str):
     probs = torch.nn.functional.softmax(output.logits, dim=1)
     print(f"probs {probs}")
     ai_prob = probs[0, 1].item()
+    if ai_prob < 0.1:
+        ai_prob = ai_prob * 10000
+    else:
+        ai_prob = ai_prob * 100
     print(f"ai prob{ai_prob}")
-    return ai_prob * 100
+    return ai_prob
 
 def train_model_from_db(db: Session):
     entries = db.query(TrainingData).all()
